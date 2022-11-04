@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Immersive Backlighting</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: grid;
+      place-content: center;
+      height: 100vh;
+    }
+
+    div.card {
+      position: relative;
+      max-width: 520px;
+    }
+
+    video,
+    canvas {
+      width: 100%;
+    }
+
+    video {
+      position: relative;
+      z-index: 1;
+    }
+
+    canvas {
+      position: absolute;
+      inset: 0;
+      transform: scaleX(120%) scaleY(140%);
+      filter: blur(32px);
+    }
+
+    div.card-footer {
+      position: relative;
+      z-index: 1;
+    }
+
+    h1,
+    h2 {
+      font-family: system-ui;
+    }
+
+    h1 {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    h2 {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 14px;
+      font-weight: 400;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="card-body">
+      <video src="assets/videos/1.mp4" controls autoplay="true" loop muted="true"></video>
+      <canvas></canvas>
+    </div>
+    <div class="card-footer">
+      <h1>Doctor Strange in the Multiverse of Madness</h1>
+      <h2>Para restaurar un mundo donde todo está cambiando, Strange busca la ayuda de su aliado Wong, el Hechicero
+        Supremo, para
+        salvar a una joven América Chávez de la Bruja Escarlata.</h2>
+    </div>
+  </div>
+
+  <script>
+
+    const video = document.querySelector('video');
+    const canvas = document.querySelector('canvas');
+    const context = canvas.getContext('2d');
+
+    var intervalId;
+
+    video.addEventListener('loadedmetadata', () => {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+    });
+
+    video.addEventListener('playing', () => {
+      if (intervalId) return;
+      intervalId = setInterval(() => {
+        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+      }, 1000 / 30);
+    });
+
+    video.addEventListener('pause', () => {
+      if (!intervalId) return;
+      clearInterval(intervalId);
+      intervalId = null;
+    });
+
+  </script>
+</body>
+
+</html>
